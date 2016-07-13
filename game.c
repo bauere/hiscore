@@ -101,7 +101,7 @@ void add_game(char* input)
 
 // Checks if game title already exists in array.
 // Returns index if game exists, or -1 if it doesn't.
-int game_exists(char* newgame)
+int game_exists(char* input)
 {
 	printf("HELLO!\n");
 	if (ngames == 0) {
@@ -109,8 +109,8 @@ int game_exists(char* newgame)
 		return -1;
 	}
 	for(int i=0; i < ngames; i++) {
-		printf("%s        %s\n", gamelist[i].title, newgame);
-		if (strcmp(gamelist[i].title, newgame) == 0)
+		printf("%s        %s\n", gamelist[i].title, input);
+		if (strcmp(gamelist[i].title, input) == 0)
 			return i;
 	}
 	return -1;
