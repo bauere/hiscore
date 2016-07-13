@@ -6,8 +6,10 @@
 // Create initial db struct for holding vars and game array.
 void db_init(database *db, int initSize)
 {
-	memset(db, '\0', sizeof(database));	
-    db->array = malloc(initSize * sizeof(game));
+	memset(db, '\0', sizeof(database));
+	if(initSize != 0) {
+    	db->array = malloc(initSize * sizeof(game));
+	}
     db->used = 0;
     db->size = initSize;
 }

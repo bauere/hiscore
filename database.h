@@ -4,7 +4,7 @@
 typedef struct game {
 
 	char title[50];
-	unsigned long long int scores[10];
+	int scores[10];
 	char names[10][3];
 
 } game;
