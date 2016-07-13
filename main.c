@@ -1,17 +1,47 @@
+#include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include "database.h"
+#include "game.h"
 
-int main(int argc, char* argv[]) {
-	
-	//TODO: flag handlers.
-	
-	//TODO: read scores.db. Store results in score
-	
-	//TODO: prompt user to enter int score.
+#define LEN_TITLE 50
 
+int main(int argc, char* argv[]) 
+{
+	
+	//Flag handler.
+	int aflag=0;
+	int c=0;
+	int index=0;
+
+	char enteredtitle[LEN_TITLE];
+	memset(enteredtitle, '\0', sizeof(enteredtitle));
+
+	opterr = 0;
+
+	while ((c = getopt(argc,argv,"a")) != -1) {
+		switch(c) {
+		case 'a':
+			aflag = 1;
+			break;
+		case '?':
+			if (optopt == 'a')
+				fprintf (stderr, "Option -%c requires an argument.\n", optopt);
+		default:
+			break;
+		}
+	}
+	// Read non-flag input (title of game). 
+	// Quit if more than one is entered.
+	for (index = optind; index < argc; index++) {
+		printf("Non-option argument %s\n", argv[index]);
+		strcpy(enteredtitle, argv[index]);
+	}
+		
+	//End flag handler.
+	
 	FILE *fp;
 	
 	// Check if file exists. If not, create it.	
@@ -21,27 +51,19 @@ int main(int argc, char* argv[]) {
 		fp = fopen("scores.db", "rb+");
 	fclose(fp);
 	
-	database gameDB;
-	memset(&gameDB, '\0', sizeof(database));
-	dbInit(&gameDB, 0);
+	// Initialize database, read scores from scores.db.
+	database gamedb;
+	db_init(&gamedb, 0);
+	file_read(fp, &gamedb);
 
-	game newGame;
-	memset(&newGame, '\0', sizeof(game));
+	if (aflag)
+		add_game(&gamedb, enteredtitle);
 	
-	strcpy(newGame.title, "lol");
+	file_write(&fp, &gamedb);
+	//fileRead(&fp, &gamedb);
+   	printf("GAME:%s", gamedb.array[0].title);
+
+	free(gamedb.array);
 		
-	dbAdd(&gameDB, &newGame);
-
-	game newGame2;
-	memset(&newGame2, '\0', sizeof(game));
-	strcpy(newGame2.title, "HOLYSHITPLEASEAPPEAR");
-	
-	dbAdd(&gameDB, &newGame2);
-
-	fp = fopen("scores.db", "wb+");
-
-	printf("\n%d\n", gameDB.size);
-	fwrite(gameDB.array, sizeof(game), gameDB.size, fp);
-	fclose(fp);
 	return 1;
 }

@@ -17,10 +17,13 @@ typedef struct database {
 
 } database;
 
-void dbInit();
-game dbRead();
-void dbAdd();
-void dbExpand();
-void dbErase();
+void db_init();
+game db_read();
+game db_createGame();
+void db_add();
+void db_expand();
+void db_erase();
+void file_read();
+void file_write();
 
 #endif
